@@ -1,6 +1,7 @@
 # vLLM Inference — Olivia, NREC, and NIRD
 
-[![Container](https://img.shields.io/badge/container-ghcr.io-blue?logo=github)](https://github.com/j34ni/vllm-on-olivia/pkgs/container/vllm-on-olivia)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20792609.svg)](https://doi.org/10.5281/zenodo.20792609)
+[![Container](https://img.shields.io/badge/container-ghcr.io-blue?logo=github)](https://github.com/users/j34ni/packages/container/package/vllm-on-olivia)
 
 This document covers running [vLLM](https://github.com/vllm-project/vllm) on three Norwegian research computing platforms: the [Olivia HPC cluster](https://documentation.sigma2.no/hpc_machines/olivia) (Sigma2), an [NREC](https://www.nrec.no/) OpenStack VM, and the [NIRD](https://www.sigma2.no/nird) Kubernetes cluster (Sigma2).
 
