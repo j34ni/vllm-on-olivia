@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/cuda:13.0.3-cudnn-devel-ubuntu24.04
+%post
+    apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+    wget -q https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh -O /tmp/miniforge.sh
+    bash /tmp/miniforge.sh -b -p /opt/conda
+    rm /tmp/miniforge.sh
+    /opt/conda/bin/conda install -y -c conda-forge \
+        ninja \
+        "python=3.12.13"
+    /opt/conda/bin/pip install "vllm==0.23.0" \
+        --extra-index-url https://download.pytorch.org/whl/cu130
+    /opt/conda/bin/pip install \
+        "fastapi==0.136.0" \
+        "prometheus-fastapi-instrumentator==8.0.0"
+    ln -sf /usr/local/cuda/bin/nvcc /opt/conda/bin/nvcc
+    ln -sf /usr/local/cuda/targets/sbsa-linux/include/fatbinary_section.h \
+           /usr/include/fatbinary_section.h
+    /opt/conda/bin/conda clean -afy
+%environment
+    export PATH=/usr/local/cuda/nvvm/bin:/usr/local/cuda/bin:/opt/conda/bin:$PATH
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/lib:/opt/conda/lib:$LD_LIBRARY_PATH
+    export CUDA_HOME=/usr/local/cuda
+%labels
+    Architecture  aarch64 / NVIDIA Grace Hopper (GH200)
+    CUDA          cuda-13.0.3-cudnn-devel-ubuntu24.04
+    Framework     vllm-0.23.0 / torch-2.11.x+cu130 / fastapi-0.136.0

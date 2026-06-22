@@ -1,0 +1,25 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/cuda:12.6.3-cudnn-devel-ubuntu24.04
+%post
+    apt-get update && apt-get install -y wget python3 python3-pip python3-venv && rm -rf /var/lib/apt/lists/*
+    python3 -m venv /opt/venv
+    /opt/venv/bin/pip install --upgrade pip
+    /opt/venv/bin/pip install \
+        "torch==2.10.0+cu126" \
+        "torchvision==0.25.0+cu126" \
+        "torchaudio==2.10.0+cu126" \
+        --index-url https://download.pytorch.org/whl/cu126
+    /opt/venv/bin/pip install "vllm==0.19.1" \
+        --extra-index-url https://download.pytorch.org/whl/cu126
+    /opt/venv/bin/pip install \
+        "fastapi==0.136.0" \
+        "prometheus-fastapi-instrumentator==8.0.0"
+%environment
+    export PATH=/usr/local/cuda/nvvm/bin:/usr/local/cuda/bin:/opt/venv/bin:$PATH
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/lib:$LD_LIBRARY_PATH
+    export CUDA_HOME=/usr/local/cuda
+    export VIRTUAL_ENV=/opt/venv
+%labels
+    Architecture  x86_64 / NVIDIA L40S-24Q (vGPU)
+    CUDA          12.6.3-cudnn-devel-ubuntu24.04
+    Framework     vllm-0.19.1 / torch-2.10.0+cu126 / fastapi-0.136.0

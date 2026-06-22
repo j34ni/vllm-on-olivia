@@ -1,0 +1,16 @@
+FROM sigma2as/deep-learning-tools:20251111-79f3422
+
+RUN pip install \
+    "torch==2.10.0+cu126" \
+    "torchvision==0.25.0+cu126" \
+    "torchaudio==2.10.0+cu126" \
+    --index-url https://download.pytorch.org/whl/cu126 && \
+    pip install "vllm==0.19.1" \
+    --extra-index-url https://download.pytorch.org/whl/cu126 && \
+    pip install \
+    "fastapi==0.136.0" \
+    "prometheus-fastapi-instrumentator==8.0.0"
+
+COPY --chmod=755 start-vllm.sh /usr/local/bin/start-notebook.d/start-vllm.sh
+
+CMD ["python", "-m", "vllm.entrypoints.openai.api_server"]
